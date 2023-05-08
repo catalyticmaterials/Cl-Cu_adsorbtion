@@ -191,7 +191,7 @@ def plot_integral(facet_dict: dict[str: Sequence[facet]], potential_list: Sequen
     for facet_key in facet_dict.keys():
         facet_theta_sorted = sorted(facet_dict[facet_key], key=attrgetter('theta'))
         colour = colour_dic[facet_str_tuple(facet_key)]
-        for i,potential in enumerate(potential_list):
+        for i, potential in enumerate(potential_list):
             ig_list, dg_list = gibbs_list(facet_theta_sorted, potential)
 
             breaking_point = facet_break_point[facet_key] if facet_key in facet_break_point else -1

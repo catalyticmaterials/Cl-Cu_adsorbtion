@@ -183,7 +183,6 @@ def main(directory: str = '.', adsorbat_str: Sequence[str] = ('CO',), facet: Opt
         Cell_surface_area = round(float(unit_cell[0]), 5) * round(float(unit_cell[1]), 5)
 
         adsorbate_result_dict = {'Pb': adsorbate_result(file_name='Pb.txt',Free_energy=FE,Cell_surface_area=Cell_surface_area,adsorb_type=adsorbat_match)}
-        print(adsorbate_result_dict['Pb'])
         adsorbate_result_dict['Pb'].Free_energy /= 4
 
     elif adsorbat_str == ['Cl']:
@@ -246,7 +245,7 @@ if __name__ == '__main__':
     parser.add_argument('--facet','-f', help='Specific facet(s) of interest, if not called then it will take every facet.', nargs='+')
     parser.add_argument('--plot', '-plot', help='Will create a plot over the binding energies for the different structures.', action='store_true', default=False)
     parser.add_argument('--csv','-csv', help='if called will create a csv table of the data.', action='store_true', default=False)
-    parser.add_argument('--Adsorbate','-Ad', help='if called look for the specified adsorbate and if not called will assume it is CO.', default=('CO',), nargs='+')
+    parser.add_argument('--Adsorbate','-Ad', help='if called look for the specified adsorbate and if not called will assume it is CO.', default=('Cl',), nargs='+')
     args = parser.parse_args()
 
     main(directory=args.dir, adsorbat_str=args.Adsorbate, facet=args.facet, plot=args.plot, csv_write=args.csv)

@@ -246,6 +246,7 @@ def liniar_root_interpolation(numerical_func: Sequence[Tuple[float,float]], back
     else: return None
     return root
 
+
 def y_val_liniar_interpolation(numerical_func:Sequence[Tuple[float,float]], x:float|int) -> float|None:
     for i,point in enumerate(numerical_func):
         if i == 0: continue
@@ -260,6 +261,7 @@ def y_val_liniar_interpolation(numerical_func:Sequence[Tuple[float,float]], x:fl
     else: return None
     return y_val
 
+
 def group_to_dict(ite: Sequence, key: Callable[[Any],int|float|str]) -> dict[Any:Any]:
     iter_sorted = sorted(ite, key=key)
     dict_res = {}
@@ -271,7 +273,6 @@ def facet_str_tuple(st:str) -> tuple[int, int, int]: return tuple(int(s) for s i
 def facet_tuple_str(li: Sequence[int]) -> str: return ''.join(str(l) for l in li)
 
 #plots
-
 def plotly_plot_potential_vs_(facet_dat, y_label, save_name: Optional = None):
     colour_dic = {(1, 0, 0): '#0000FD',
                   (1, 1, 0): '#00FD00',
@@ -332,6 +333,7 @@ def pop_plot_potential_vs_(facet_dat, y_label, save_name, legend: bool = True, x
 def sprint(x):
     print(x)
     return x
+
 
 def main(facet_csv_path:str, potential_sce: Sequence[float | int] = (-0.9, 0.6, 500),interpolate: bool = True, draw_wulff: bool = False, plotly: bool = False):
     facet_tuple = read_csv_facet(facet_csv_path)
