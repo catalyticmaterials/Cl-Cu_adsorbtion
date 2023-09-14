@@ -21,19 +21,15 @@ class constants:
     T = 298.15
     k_boltz = 8.617333262145 * 10**(-5) # ev/K
     Avogadros_number = 6.02214076 * 10**(23) # mol^-1
-    # https://janaf.nist.gov/tables/C-093.html
-    # gas_TS = -0.615 # ev
+    # https://janaf.nist.gov
     gas_ZPE = {'CO':0.14, 'Cl':0.049/2, 'OH': 0.241, 'F':0.068/2} # ev
-    # gas_CpDT = 0.09 # ev
-    #gas_CpDT = {'CO':JK1MOL1_converter(8.671) * T,'OH':JK1MOL1_converter(9.172) * T,'Cl':JK1MOL1_converter(6.272)*T,'F':JK1MOL1_converter(6.518)*T} # 8.99 * 10**-5 ev/k
     gas_CpDT = {'CO':kJMOL1_converter(8.671),'OH':kJMOL1_converter(9.172),'Cl':kJMOL1_converter(9.181)/2,'F':kJMOL1_converter(6.518)} # 8.99 * 10**-5 ev/k
-    # gas_TS = -0.67
-    #gas_TS = {'CO': JK1MOL1_converter(197.142) * T,'OH':JK1MOL1_converter(183.708) * T, 'Cl':JK1MOL1_converter(165.189)*T,'F':JK1MOL1_converter(158.750)*T}  # -0.6130180676813006 ev
     gas_TS = {'CO': JK1MOL1_converter(197.142) * T,'OH':JK1MOL1_converter(183.708) * T, 'Cl':JK1MOL1_converter(223.079)/2*T,'F':JK1MOL1_converter(158.750)*T}  # -0.6130180676813006 ev
     bound_ZPE = {'CO':0.192, 'OH':0.364,'Cl':0.03,'F':0.03}
     bound_CpDT = {'CO':0.076, 'OH':0.046,'Cl':0.053,'F':0.053}
     bound_TS = {'CO':0.153, 'OH':-0.079, 'Cl':0.108,'F':0.108} # ev
     P_zero = 0.1# MPa
+
 
 @dataclass
 class facet():
