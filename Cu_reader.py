@@ -25,7 +25,7 @@ def set_slap_object(fil:str) -> slab_result | None:
         unit_cell = re.findall(
                 r'(?:1.\saxis:\s+\w+\s+)(?P<x1>\d+\.\d+)(?:.*)(?:\s+2.\saxis:\s+\w+\s+\d+\.\d+\s+)(?P<y2>\d+\.\d+)',
                 work_file_dat)[-1]
-        return slab_result(file_name=fil,Free_energy=FE,Cell_surface_area=round(float(unit_cell[0]), 5) * round(float(unit_cell[1]), 5),facet=name_format_grouping.group('facet'))
+        return slab_result(file_name=fil, Free_energy=FE, Cell_surface_area=round(float(unit_cell[0]), 5) * round(float(unit_cell[1]), 5), facet=name_format_grouping.group('facet'))
     except: return None
 
 @dataclass
@@ -168,7 +168,7 @@ def main(directory: str = '.', adsorbat_str: Sequence[str] = ('CO',), facet: Opt
     #make the file name pattern here:
     file_string = facet_pattern+''.join([f'_{ad_str}_\d+per\d+' for ad_str in adsorbat_str])+'\w?\Z'
 
-    slab_list = [f for f in os.listdir(directory) if re.match(r'(?:%s)_slab' % facet_pattern, f)]
+    slab_list = [f for f in os.listdir(directory) if re.match(r'(?:%s)_slab(_per\d+)?\Z' % facet_pattern, f)]
     slab_results = [set_slap_object(f'{directory}/{r}/slab_k441') if not 'rerun' in os.listdir(f'{directory}/{r}/.') else set_slap_object(f'{directory}/{r}/rerun/slab_k441') for r in slab_list]
     slab_results: Sequence[slab_result] = [res for res in slab_results if res]
 
