@@ -15,23 +15,20 @@ import plotly.graph_objects as go
 def JK1MOL1_converter(x: float | int) -> float: return (x*(1/(6.02214076 * (10**23)))) * (6.242 * (10**18))
 def kJMOL1_converter(x: float | int) -> float: return (x*(1/(6.242 * (10**21)))) * (6.242 * (10**18))
 
+
 class constants:
     T = 298.15
     k_boltz = 8.617333262145 * 10**(-5) # ev/K
     Avogadros_number = 6.02214076 * 10**(23) # mol^-1
-    # https://janaf.nist.gov/tables/C-093.html
-    # gas_TS = -0.615 # ev
+    # https://janaf.nist.gov
     gas_ZPE = {'CO':0.14, 'Cl':0.049/2, 'OH': 0.241, 'F':0.068/2} # ev
-    # gas_CpDT = 0.09 # ev
-#    gas_CpDT = {'CO':JK1MOL1_converter(8.671) * T,'OH':JK1MOL1_converter(9.172) * T,'Cl':JK1MOL1_converter(6.272)*T,'F':JK1MOL1_converter(6.518)*T} # 8.99 * 10**-5 ev/k
     gas_CpDT = {'CO':kJMOL1_converter(8.671),'OH':kJMOL1_converter(9.172),'Cl':kJMOL1_converter(9.181)/2,'F':kJMOL1_converter(6.518)} # 8.99 * 10**-5 ev/k
-    # gas_TS = -0.67
-#    gas_TS = {'CO': JK1MOL1_converter(197.142) * T,'OH':JK1MOL1_converter(183.708) * T, 'Cl':JK1MOL1_converter(165.189)*T,'F':JK1MOL1_converter(158.750)*T}  # -0.6130180676813006 ev
     gas_TS = {'CO': JK1MOL1_converter(197.142) * T,'OH':JK1MOL1_converter(183.708) * T, 'Cl':JK1MOL1_converter(223.079)/2*T,'F':JK1MOL1_converter(158.750)*T}  # -0.6130180676813006 ev
     bound_ZPE = {'CO':0.192, 'OH':0.364,'Cl':0.03,'F':0.03}
     bound_CpDT = {'CO':0.076, 'OH':0.046,'Cl':0.053,'F':0.053}
     bound_TS = {'CO':0.153, 'OH':-0.079, 'Cl':0.108,'F':0.108} # ev
     P_zero = 0.1# MPa
+
 
 @dataclass
 class facet():
@@ -83,6 +80,7 @@ class slab():
     dft_energy: float
     cell_surface_area: float
 
+
 def read_CSV_slab(fil: str) -> list[slab]:
     def line_reader(line: list[str]):
         kwargs = {
@@ -100,7 +98,6 @@ def read_CSV_slab(fil: str) -> list[slab]:
 
 def diff_FEuler(Y0: float or int, Y1 : float or int, X_step: float or int) -> float: return (Y1 - Y0)/X_step
 def Delta_G(DE_dft: float or int, DZP: float or int ,DTS: float or int,CpDT: float or int) -> float: return DE_dft + DZP - DTS + CpDT
-# def G_total(E_adsorp,DZP,TS,CpDT,CO_nr): return E_adsorp * CO_nr + DZP + TS + CpDT
 
 def G_int(E_ad_avg:float,N_CO:int,DZ:float,TS:float,CpDT:float) -> float: return N_CO * (E_ad_avg+DZ-TS+CpDT)
 
@@ -128,6 +125,7 @@ def gibbs_list(sorted_facet: List[facet], potential: float = 0) -> Tuple[List[fl
         Dgibbs.append(Delta_G(DE_dft=Diff_Bin_E, DZP=delta_ZPE, DTS=delta_TS_diff, CpDT=delta_Cp))
         int_gibbs.append((G_int(E_ad_avg=point.binding_energy(potential), N_CO=sum(point.adsorbate_no.values()),DZ=delta_ZPE, TS=TS, CpDT=delta_Cp)) / point.cell_surface_area)
     return int_gibbs,Dgibbs
+
 
 def liniar_root_interpolation(numerical_func:Sequence[Tuple[float,float]],backwards: bool=False) -> float|None:
     if backwards: numerical_func = reversed(numerical_func)
@@ -159,6 +157,7 @@ def y_val_liniar_interpolation(numerical_func: Sequence[Tuple[float,float]], x: 
     else: return None
     return y_val
 
+
 def group_to_dict(ite: Sequence, key: Callable[[Any],int|float|str]) -> dict[Any:Any]:
     iter_sorted = sorted(ite, key=key)
     dict_res = {}
@@ -170,6 +169,7 @@ def facet_tuple_str(li: Sequence[int]) -> str: return ''.join(str(l) for l in li
 
 def folder_exist(folder_name: str) -> NoReturn:
     if folder_name not in os.listdir(): os.mkdir(folder_name)
+
 
 def plot_integral(facet_dict: dict[str: Sequence[facet]], potential_list: Sequence[float], name: Optional[str] = None):
     sce = 0.248
@@ -252,7 +252,6 @@ def plot_integral_plt(facet_dict: dict[str:Sequence[facet]], potential_list: Seq
 
     #    ax.set_ylabel('$\Delta$ Gibbs integral \n energy pr area (eV/$Å^2$)')
     ax.set_ylabel('$\Delta$$G_{nCl}$ /A (eV/$Å^2$)')
-    #print(ax.ylabel.fontfamily) # didnt work
 
     ax.axhline(y=-0.01417896, linestyle='--')
     #ax.legend()
@@ -270,7 +269,6 @@ def plot_integral_plt(facet_dict: dict[str:Sequence[facet]], potential_list: Seq
 def main(facet_csv_path: str, potential_list: Sequence[float],plt: bool = False,fun: bool = False):
     facet_tuple = read_csv_facet(facet_csv_path)
     facet_group: Dict[str,List[facet]] = group_to_dict(facet_tuple, key=attrgetter('facet'))
-    #folder_exist(f'{facet_tuple[0].adsorbate}_vari_potential_plots')
 
     colour_dic = {(1, 0, 0): '#0000FD',
      (1, 1, 0): '#00FD00',
@@ -288,7 +286,7 @@ def main(facet_csv_path: str, potential_list: Sequence[float],plt: bool = False,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('facet_csv',help='path to the facet csv')
-    parser.add_argument('-U','--potential',nargs='*', type=float)
+    parser.add_argument('-U','--potential', default=[-0.152,0.748], nargs='*', type=float)
     parser.add_argument('-plt','--matplotlib',action='store_true')
     parser.add_argument('-fun','--fun',action='store_true', help='fun works with plt')
     args = parser.parse_args()
